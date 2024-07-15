@@ -1,0 +1,53 @@
+﻿@page "/"
+@using Shared.Models
+@using Client.Components
+@inject IConfiguration Configuration
+
+
+<h1>Lista Docenti</h1>
+<p>
+    Questa è la schermata home di uno studente. <br/>
+    Da qui è possibili visualizzare la lista dei docenti, selezionarle uno e visualizzare le informazioni
+    relative al prof.<br/>
+    Non essendo implementato il login, sarà sempre lo studente 1 a creare nuovi colloqui.
+</p>
+
+@if (DocentiList != null)
+{
+    <TabellaDocenti Docenti="@(DocentiList)"/>
+}
+else
+{
+    <p>Caricamento in corso...</p>
+}
+
+@code
+{
+    public List<Docente> DocentiList { get; set; }
+
+    private string? _apiUrl;
+    private HttpClient Http { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Http = new HttpClient();
+            _apiUrl = Configuration["ApiUrl"];
+
+            if (_apiUrl != null) Http.BaseAddress = new Uri(_apiUrl);
+
+            var req = await Http.GetFromJsonAsync<List<Docente>>("Docenti");
+            Http.Dispose();
+            
+            if (req != null)
+            {
+                DocentiList = req;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

@@ -1,0 +1,122 @@
+﻿@using Shared.Models
+@inject IConfiguration Configuration
+
+<h3>Interview Requests</h3>
+
+@if (interviewRequests == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Studente</th>
+            <th>Docente Richiesto</th>
+            <th>Data richiesta</th>
+            <th>Orario richiesto</th>
+            <th>Dettaglio</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var request in interviewRequests)
+        {
+            <tr>
+                <td>@request.Studente.Nome @request.Studente.Cognome</td>
+                <td>@request.DataColloquioRichiesta.ToShortDateString()</td>
+                <td>@request.DataColloquioRichiesta.ToShortTimeString()</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowDetails(request)">INFO</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@if (showDetailsPopup)
+{
+<div class="modal show d-block" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dettaglio richiesta</h5>
+                <button type="button" class="btn close border border-dark" @onclick="CloseDetails">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Professor:</strong> @selectedRequest.Docente.Name</p>
+                <p><strong>Requested Time:</strong> @selectedRequest.Docente.LastName</p>
+                <p><strong>Details:</strong> @selectedRequest.Confermato</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" @onclick="(()=> ConfirmOrDenyRequest(selectedRequest.Id, true))">Accetta</button>
+                <button class="btn btn-danger" @onclick="(()=> ConfirmOrDenyRequest(selectedRequest.Id, false))">Rifiuta</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter] public string DocenteId { get; set; }
+
+    private List<Appuntamento> interviewRequests;
+    private Appuntamento selectedRequest;
+    private bool showDetailsPopup = false;
+
+    public HttpClient Http { get; set; }
+    private string? _apiUrl;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Http = new HttpClient();
+            _apiUrl = Configuration["ApiUrl"];
+ 
+            if (_apiUrl != null) Http.BaseAddress = new Uri(_apiUrl);
+            interviewRequests = await Http.GetFromJsonAsync<List<Appuntamento>>($"Colloqui");
+            Http.Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void ShowDetails(Appuntamento request)
+    {
+        selectedRequest = request;
+        showDetailsPopup = true;
+    }
+
+    private void CloseDetails()
+    {
+        showDetailsPopup = false;
+    }
+
+    private async Task ConfirmOrDenyRequest(int requestId, bool confirm)
+    {
+        try
+        {
+            Http = new HttpClient();
+            _apiUrl = Configuration["ApiUrl"];
+            Http.BaseAddress = new Uri(_apiUrl);
+            
+            var response = await Http.PutAsync($"Colloqui/ConfermaColloquio/{requestId}?conferma={confirm}", null);
+            
+            Http.Dispose();
+            CloseDetails();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
+    }
+
+    
+
+}

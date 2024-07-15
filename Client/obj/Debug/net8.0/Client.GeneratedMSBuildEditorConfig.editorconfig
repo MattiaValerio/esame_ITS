@@ -1,0 +1,79 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = 
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = browser
+build_property.RootNamespace = Client
+build_property.RootNamespace = Client
+build_property.ProjectDir = C:\Users\matti\Desktop\Accademy\Client\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = false
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = C:\Users\matti\Desktop\Accademy\Client
+build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/matti/Desktop/Accademy/Client/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Components/TabellaDocenti.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYWJlbGxhRG9jZW50aS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Components/TabellaRichieste.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYWJlbGxhUmljaGllc3RlLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Components/TabellaRichiesteProf.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYWJlbGxhUmljaGllc3RlUHJvZi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Components/TabellaRichiesteStuds.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYWJlbGxhUmljaGllc3RlU3R1ZHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Components/TabellaStudenti.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xUYWJlbGxhU3R1ZGVudGkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Pages/Colloqui.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29sbG9xdWkucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Pages/ColloquiDocenti.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29sbG9xdWlEb2NlbnRpLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Pages/ColloquiStudenti.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29sbG9xdWlTdHVkZW50aS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Pages/Docenti.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jZW50aS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Pages/Home.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSG9tZS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/_Imports.razor]
+build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/matti/Desktop/Accademy/Client/Layout/MainLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-tmopy668it
+
+[C:/Users/matti/Desktop/Accademy/Client/Layout/NavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-9qkkwgv1yd

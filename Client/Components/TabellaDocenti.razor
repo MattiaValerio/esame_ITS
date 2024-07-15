@@ -1,0 +1,182 @@
+﻿@using Shared.DTOs
+@using Shared.Models
+@inject IConfiguration Configuration
+
+<style>
+    /* Modal styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-dialog {
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+    }
+</style>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Cognome</th>
+            <th>Dettagli</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var docente in Docenti)
+        {
+            <tr>
+                <td>@docente.Id</td>
+                <td>@docente.Name</td>
+                <td>@docente.LastName</td>
+                <td><button class="btn btn-primary" @onclick="() => MostraDettagli(docente)">Dettagli</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (DocenteSelezionato != null)
+{
+    <div class="modal" style="display:block">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dettagli Docente</h5>
+                    <button type="button" class="btn-close" @onclick="ChiudiDettagli"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nome:</strong> @DocenteSelezionato.Name</p>
+                    <p><strong>Cognome:</strong> @DocenteSelezionato.LastName</p>
+                    <p><strong>Specializzazione:</strong> @DocenteSelezionato.Specializzazione.ToString()</p>
+                    <p><strong>Modalità di Ricevimento:</strong> @DocenteSelezionato.ModRicevimento.ToString()</p>
+                    
+                    <p><strong>A scuola il:</strong>
+                        @foreach (var day in DocenteSelezionato.GiornateDiInsegnamento)
+                        {
+                            <br/>@day.ToString()
+                        }</p>
+                    
+                    <p><strong>Disponibilità colloqui:</strong>
+                        @foreach (var day in DocenteSelezionato.DisponibilitaRicevimento)
+                        {
+                            <br/>@day.ToString()
+                        }</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="@(()=> ApriPrenotazione(DocenteSelezionato.Id))">Prenota</button>
+                    <button type="button" class="btn btn-secondary" @onclick="@(ChiudiDettagli)">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (MostraFormPrenotazione)
+{
+<div class="modal" style="display:block">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Prenotazione Studente</h5>
+                <button type="button" class="btn-close" @onclick="ChiudiFormPrenotazione"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@(Prenotazione)" OnValidSubmit="ConfermaPrenotazione">
+                    <div class="mb-3">
+                        <label for="dataPrenotazione" class="form-label">Data Prenotazione</label>
+                        <InputDate Type="InputDateType.DateTimeLocal"  id="dataPrenotazione" class="form-control" @bind-Value="@(Prenotazione.DataColloquioRichiesta)" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Conferma</button>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="ChiudiFormPrenotazione">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@code {
+    private bool MostraFormPrenotazione;
+    public Appuntamento Prenotazione = new Appuntamento();
+    
+    [Parameter] public List<Docente> Docenti { get; set; }
+    private Docente DocenteSelezionato;
+    private void MostraDettagli(Docente doc)
+    {
+        DocenteSelezionato = doc;
+    }
+
+    private void ChiudiDettagli()
+    {
+        DocenteSelezionato = null;
+    }
+    
+    private void ApriPrenotazione(int docenteId)
+    {
+        MostraFormPrenotazione = true;
+        Prenotazione.Docente = DocenteSelezionato;
+    }
+
+    private void ChiudiFormPrenotazione()
+    {
+        MostraFormPrenotazione = false;
+    }
+
+    private string? _apiUrl;
+    private HttpClient Http { get; set; }
+    private async Task ConfermaPrenotazione()
+    {
+        // Logica per confermare la prenotazione (ad esempio, salvare nel database)
+        try
+        {
+            Http = new HttpClient();
+            _apiUrl = Configuration["ApiUrl"];
+
+            if (_apiUrl != null) Http.BaseAddress = new Uri(_apiUrl);
+            
+            var req = await Http.PostAsJsonAsync("Colloqui",
+                new AddAppuntamento
+                {
+                    DocenteId = Prenotazione.Docente.Id,
+                    StudenteId = 1,
+                    Appuntamento = new DateTime(Prenotazione.DataColloquioRichiesta.Year, 
+                        Prenotazione.DataColloquioRichiesta.Month, 
+                        Prenotazione.DataColloquioRichiesta.Day, 
+                        Prenotazione.DataColloquioRichiesta.Hour, 
+                        Prenotazione.DataColloquioRichiesta.Minute,
+                        Prenotazione.DataColloquioRichiesta.Second, 
+                        DateTimeKind.Utc)
+                });
+            Http.Dispose();
+            
+            if (req.IsSuccessStatusCode)
+            {
+                ChiudiFormPrenotazione();
+                ChiudiDettagli();
+            }
+            
+           
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}

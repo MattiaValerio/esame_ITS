@@ -1,0 +1,49 @@
+﻿@page "/Docenti"
+@using Shared.Models
+@using Client.Components
+@inject IConfiguration Configuration
+<h1>Lista studenti</h1>
+<p>
+    Questa è la schermata home di un docente. <br/>
+    Da qui è possibili visualizzare la lista degli alunni, selezionarle uno e visualizzare le informazioni
+    relative.
+    Sarà poi possibile modificare le informazioni relative allo studente. <br/>
+    [non disponibile in questa versione]
+</p>
+@if (StudentiList != null)
+{
+    <TabellaStudenti Studenti="@(StudentiList)"/>
+}
+else
+{
+    <p>Caricamento in corso...</p>
+}
+
+@code
+{
+    public List<Studente> StudentiList { get; set; }
+    
+    private string? _apiUrl;
+    private HttpClient Http { get; set; } = new();
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _apiUrl = Configuration["ApiUrl"];
+ 
+            if (_apiUrl != null) Http.BaseAddress = new Uri(_apiUrl);
+
+            var req = await Http.GetFromJsonAsync<List<Studente>>("Studenti");
+            
+            if(req != null)
+            {
+                StudentiList = req;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+

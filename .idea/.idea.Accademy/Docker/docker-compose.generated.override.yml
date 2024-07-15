@@ -1,0 +1,40 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  api:
+    build:
+      context: "C:\\Users\\matti\\Desktop\\Accademy"
+      dockerfile: "API/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/API.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\matti\\.nuget\\packages:/home/app/.nuget/packages"
+    - "C:\\Users\\matti\\Desktop\\Accademy\\API:/app:rw"
+    - "C:\\Users\\matti\\Desktop\\Accademy:/src:rw"
+    working_dir: "/app"
+  client:
+    build:
+      context: "C:\\Users\\matti\\Desktop\\Accademy"
+      dockerfile: "Client/Dockerfile"
+      target: "build"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/../../../.nuget/packages/microsoft.aspnetcore.components.webassembly.devserver/8.0.6/tools/blazor-devserver.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "client:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\matti\\.nuget\\packages:/root/.nuget/packages"
+    - "C:\\Users\\matti\\Desktop\\Accademy\\Client:/app:rw"
+    - "C:\\Users\\matti\\Desktop\\Accademy:/src:rw"
+    working_dir: "/app"

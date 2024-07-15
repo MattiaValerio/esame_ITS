@@ -1,0 +1,88 @@
+﻿@using Shared.Models
+
+<style>
+    /* Modal styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-dialog {
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+    }
+</style>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Cognome</th>
+            <th>Dettagli</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var studente in Studenti)
+        {
+            <tr>
+                <td>@studente.Id</td>
+                <td>@studente.Nome</td>
+                <td>@studente.Cognome</td>
+                <td><button class="btn btn-primary" @onclick="() => MostraDettagli(studente)">Dettagli</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (StudenteSelezionato != null)
+{
+    <div class="modal" style="display:block">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dettagli Studente</h5>
+                    <button type="button" class="btn-close" @onclick="ChiudiDettagli"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nome:</strong> @StudenteSelezionato.Nome</p>
+                    <p><strong>Cognome:</strong> @StudenteSelezionato.Cognome</p>
+                    <p><strong>Data di Nascita:</strong> @StudenteSelezionato.DataNascita.ToShortDateString()</p>
+                    <p><strong>Telefono:</strong> @StudenteSelezionato.Telefono</p>
+                    <p><strong>Email:</strong> @StudenteSelezionato.Email</p>
+                    <p><strong>Note:</strong> @StudenteSelezionato.Nome</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="ChiudiDettagli">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public List<Studente> Studenti { get; set; }
+    private Studente StudenteSelezionato;
+    private void MostraDettagli(Studente studente)
+    {
+        StudenteSelezionato = studente;
+    }
+
+    private void ChiudiDettagli()
+    {
+        StudenteSelezionato = null;
+    }
+}

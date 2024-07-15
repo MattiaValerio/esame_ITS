@@ -1,0 +1,84 @@
+﻿@using Shared.Models
+@inject IConfiguration Configuration
+
+<h3>Interview Requests</h3>
+
+@if (interviewRequests == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Docente</th>
+            <th>Data richiesto</th>
+            <th>Orario richiesto</th>
+            <th>Stato</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var request in interviewRequests)
+        {
+            <tr>
+                <td>@request.Docente.Name @request.Docente.LastName</td>
+                <td>@request.DataColloquioRichiesta.ToShortDateString()</td>
+                <td>@request.DataColloquioRichiesta.ToShortTimeString()</td>
+                <td>@(request.Confermato ? "✅" : "❌")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter] public string StudenteID { get; set; }
+
+    private List<Appuntamento> interviewRequests;
+    private Appuntamento selectedRequest;
+    private bool showDetailsPopup = false;
+
+    public HttpClient Http { get; set; }
+    private string? _apiUrl;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Http = new HttpClient();
+            _apiUrl = Configuration["ApiUrl"];
+ 
+            if (_apiUrl != null) Http.BaseAddress = new Uri(_apiUrl);
+            interviewRequests = await Http.GetFromJsonAsync<List<Appuntamento>>($"Colloqui/GetColloquiStudente/{StudenteID}");
+            Http.Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void ShowDetails(Appuntamento request)
+    {
+        selectedRequest = request;
+        showDetailsPopup = true;
+    }
+
+    private void CloseDetails()
+    {
+        showDetailsPopup = false;
+    }
+
+    private void AcceptRequest()
+    {
+// Implement logic to accept the request
+        CloseDetails();
+    }
+
+    private void RejectRequest()
+    {
+// Implement logic to reject the request
+        CloseDetails();
+    }
+
+}
